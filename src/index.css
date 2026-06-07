@@ -1,0 +1,331 @@
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────────────────────
+   DESIGN TOKENS — The Art of Story Telling by Harsh Shah
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colours - Redesigned to Luxury Navy */
+  --color-bg:           #090A0F;
+  --color-bg-deep:      #06070A;
+  --color-surface:      #0A0B10;
+  --color-surface-2:    #0E0D12;
+  --color-gold:         #D4A44B;
+  --color-gold-light:   #E2BE6C;
+  --color-gold-bright:  #F1D08A;
+  --color-gold-muted:   #8B7355;
+  --color-gold-border:  rgba(212, 164, 75, 0.20);
+  --color-gold-glow:    rgba(212, 164, 75, 0.15);
+  --color-text:         #F5EFE6;
+  --color-text-muted:   #AAAAAA;
+  --color-text-dim:     #666666;
+  --color-petal-1:      #E8C4B8;
+  --color-petal-2:      #F5ECD7;
+  --color-error:        #D4756A;
+  --color-card:         rgba(255, 255, 255, 0.03);
+  --color-card-hover:   rgba(255, 255, 255, 0.06);
+  --color-overlay:      rgba(0, 0, 0, 0.75);
+
+  /* Typography */
+  --font-display:  'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  --font-heading:  'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  --font-body:     'Jost', 'Inter', system-ui, sans-serif;
+  --font-script:   'Dancing Script', cursive;
+
+  /* Spacing */
+  --section-py-desktop: 120px;
+  --section-py-mobile:  72px;
+  --max-w:              1200px;
+
+  /* Borders */
+  --radius-card:    12px;
+  --radius-input:   10px;
+  --radius-btn:     10px;
+  --radius-popup:   28px;
+
+  /* Shadows */
+  --shadow-gold:    0 0 40px rgba(212, 164, 75, 0.12);
+  --shadow-card:    0 24px 64px rgba(0, 0, 0, 0.6);
+  --shadow-popup:   0 20px 80px rgba(0, 0, 0, 0.6);
+
+  /* Transitions */
+  --ease-luxury:    cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   RESET & BASE
+   ───────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  background-color: #06070A;
+  cursor: none; /* Hide default cursor for custom cinematic cursor */
+}
+
+body {
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-weight: 300;
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  cursor: none; /* Hide default cursor */
+}
+
+/* Fallback for links and buttons to hide cursor */
+a, button, input, textarea, select {
+  cursor: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+input, textarea, button {
+  font-family: inherit;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SCROLLBAR
+   ───────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-bg-deep); }
+::-webkit-scrollbar-thumb {
+  background: var(--color-gold-muted);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-gold); }
+
+/* ─────────────────────────────────────────────────────────────
+   TYPOGRAPHY UTILITIES
+   ───────────────────────────────────────────────────────────── */
+.font-display { font-family: var(--font-display); }
+.font-heading { font-family: var(--font-heading); }
+.font-body    { font-family: var(--font-body); }
+.font-script  { font-family: var(--font-script); }
+
+.text-gold        { color: var(--color-gold); }
+.text-gold-light  { color: var(--color-gold-light); }
+.text-muted       { color: var(--color-text-muted); }
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION WRAPPER & BLENDING
+   ───────────────────────────────────────────────────────────── */
+.section {
+  padding: var(--section-py-desktop) 24px;
+  position: relative;
+  /* Cinematic mask for soft blending between sections */
+  mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 5%, black 95%, transparent);
+}
+
+.section-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+}
+
+.section-label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-label::before,
+.section-label::after {
+  content: '';
+  display: block;
+  height: 1px;
+  width: 32px;
+  background: var(--color-gold-border);
+  flex-shrink: 0;
+}
+
+.section-heading {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+  margin-bottom: 20px;
+}
+
+.section-subheading {
+  font-family: var(--font-body);
+  font-size: clamp(16px, 1.8vw, 19px);
+  font-weight: 300;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   GOLD GRADIENT TEXT
+   ───────────────────────────────────────────────────────────── */
+.text-gradient-gold {
+  background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-bright) 50%, var(--color-gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   GOLD BUTTON
+   ───────────────────────────────────────────────────────────── */
+.btn-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 40px;
+  background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-light) 50%, var(--color-gold-bright) 100%);
+  color: #111;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: var(--radius-btn);
+  cursor: pointer;
+  transition: transform 0.3s var(--ease-luxury),
+              box-shadow 0.3s var(--ease-luxury),
+              filter 0.3s var(--ease-luxury);
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.btn-gold::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.25) 50%, transparent 100%);
+  transform: translateX(-100%);
+  transition: transform 0.6s var(--ease-luxury);
+}
+
+.btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(212, 164, 75, 0.4);
+  filter: brightness(1.05);
+}
+
+.btn-gold:hover::before {
+  transform: translateX(100%);
+}
+
+.btn-gold:active {
+  transform: translateY(0);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   GLASS CARD
+   ───────────────────────────────────────────────────────────── */
+.glass-card {
+  background: rgba(15, 15, 15, 0.8);
+  border: 1px solid var(--color-gold-border);
+  border-radius: var(--radius-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   DECORATIVE DIVIDER
+   ───────────────────────────────────────────────────────────── */
+.divider-gold {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+  margin: 24px auto;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   ANIMATIONS (PHASE 3)
+   ───────────────────────────────────────────────────────────── */
+@keyframes nodePulse {
+  0% { box-shadow: 0 0 0 0 rgba(212, 164, 75, 0.6); }
+  70% { box-shadow: 0 0 0 15px rgba(212, 164, 75, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(212, 164, 75, 0); }
+}
+
+/* Floating icon animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+
+/* Pulsing glow */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(212, 164, 75, 0.2); }
+  50%       { box-shadow: 0 0 40px rgba(212, 164, 75, 0.5); }
+}
+
+/* Shimmer sweep for button */
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Countdown digit flip */
+@keyframes digitFlip {
+  0%   { transform: translateY(-4px); opacity: 0; }
+  100% { transform: translateY(0);    opacity: 1; }
+}
+
+/* Soft breathing */
+@keyframes breathe {
+  0%, 100% { opacity: 0.7; }
+  50%       { opacity: 1.0; }
+}
+
+/* Confetti burst base */
+@keyframes confettiFall {
+  0%   { transform: translateY(-20px) rotate(0deg);   opacity: 1; }
+  100% { transform: translateY(120px) rotate(720deg); opacity: 0; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   GSAP INITIAL HIDDEN STATE (prevents flash before animation)
+   ───────────────────────────────────────────────────────────── */
+.gsap-hidden {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   RESPONSIVE
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .section {
+    padding: var(--section-py-mobile) 20px;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   REDUCED MOTION
+   ───────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .gsap-hidden {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
