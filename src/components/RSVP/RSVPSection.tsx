@@ -13,7 +13,7 @@ type Status = 'idle' | 'submitting' | 'confirmed_attend' | 'confirmed_decline'
 
 interface FormState {
   attending: Attending
-  guestCount: number
+  firstTime: boolean
   message: string
 }
 
@@ -22,7 +22,7 @@ export default function RSVPSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const formRef    = useRef<HTMLDivElement>(null)
 
-  const [form, setForm] = useState<FormState>({ attending: null, guestCount: 1, message: '' })
+  const [form, setForm] = useState<FormState>({ attending: null, firstTime: false, message: '' })
   const [status, setStatus] = useState<Status>('idle')
   const [errors, setErrors] = useState<Record<string, string>>({})
 
@@ -43,24 +43,43 @@ export default function RSVPSection() {
     return Object.keys(errs).length === 0
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     if (!validate()) return
     setStatus('submitting')
 
-    // Simulate async (Phase 1 — console log only)
-    setTimeout(() => {
-      console.log('📋 RSVP Submission:', {
-        name:      firstName || 'Guest',
-        attending: form.attending,
-        guests:    form.attending === 'yes' ? form.guestCount : 0,
-        message:   form.message,
-        timestamp: new Date().toISOString(),
+    // Google Form Configuration
+    const GOOGLE_FORM_ACTION_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdbHIyf-ntcrGxHsM16LG6ny2Us15MDwZrnEeQHF5i32nfUcA/formResponse'
+    const ENTRY_NAME = 'entry.2018866782'
+    const ENTRY_ATTENDING = 'entry.1898644087'
+    const ENTRY_FIRST_TIME = 'entry.1037922086'
+    const ENTRY_MESSAGE = 'entry.335981076'
+
+    const formData = new URLSearchParams()
+    formData.append(ENTRY_NAME, firstName || 'Guest')
+    formData.append(ENTRY_ATTENDING, form.attending === 'yes' ? 'I will be joining you' : "I won't be able to attend")
+    formData.append(ENTRY_FIRST_TIME, form.firstTime ? 'Yes' : 'No')
+    formData.append(ENTRY_MESSAGE, form.message)
+
+    try {
+      await fetch(GOOGLE_FORM_ACTION_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Important for Google Forms to bypass CORS
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: formData.toString()
       })
+    } catch (error) {
+      console.error('RSVP submission error (can be ignored if URL is a placeholder):', error)
+    }
+
+    // Give a small delay for a smooth UI transition
+    setTimeout(() => {
       setStatus(form.attending === 'yes' ? 'confirmed_attend' : 'confirmed_decline')
 
       // Confetti for attending
       if (form.attending === 'yes') launchConfetti()
-    }, 900)
+    }, 600)
   }
 
   function launchConfetti() {
@@ -233,6 +252,41 @@ export default function RSVPSection() {
             /* ── Form state ── */
             <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
 
+              {/* Pre-filled Name */}
+              <div>
+                <label
+                  style={{
+                    display: 'block',
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '14px',
+                    fontWeight: 500,
+                    letterSpacing: '0.08em',
+                    color: 'var(--color-text)',
+                    marginBottom: '10px',
+                  }}
+                >
+                  Name
+                </label>
+                <input
+                  type="text"
+                  readOnly
+                  value={firstName || 'Guest'}
+                  style={{
+                    width: '100%',
+                    padding: '14px 16px',
+                    background: 'rgba(255,255,255,0.02)',
+                    border: '1px solid rgba(212,164,75,0.1)',
+                    borderRadius: 'var(--radius-input)',
+                    color: 'var(--color-text-muted)',
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '15px',
+                    fontWeight: 300,
+                    outline: 'none',
+                    cursor: 'not-allowed',
+                  }}
+                />
+              </div>
+
               {/* Attending toggle */}
               <div>
                 <p style={{
@@ -247,8 +301,8 @@ export default function RSVPSection() {
                 </p>
                 <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                   {([
-                    { val: 'yes', label: "✓  Yes, I'll be there!" },
-                    { val: 'no',  label: "✗  I'll miss this one" },
+                    { val: 'yes', label: "✓  I will be joining you" },
+                    { val: 'no',  label: "✗  I won't be able to attend" },
                   ] as const).map(({ val, label }) => (
                     <button
                       key={val}
@@ -280,46 +334,34 @@ export default function RSVPSection() {
                 )}
               </div>
 
-              {/* Guest count — only if attending */}
+              {/* First time checkbox — only if attending */}
               {form.attending === 'yes' && (
                 <div>
                   <label
-                    htmlFor="guest-count"
                     style={{
-                      display: 'block',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      cursor: 'pointer',
                       fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      fontWeight: 500,
-                      letterSpacing: '0.08em',
+                      fontSize: '15px',
+                      fontWeight: 300,
                       color: 'var(--color-text)',
-                      marginBottom: '12px',
                     }}
                   >
-                    Number of guests (including yourself)
+                    <input
+                      type="checkbox"
+                      checked={form.firstTime}
+                      onChange={e => setForm(f => ({ ...f, firstTime: e.target.checked }))}
+                      style={{
+                        width: '20px',
+                        height: '20px',
+                        accentColor: 'var(--color-gold)',
+                        cursor: 'pointer',
+                      }}
+                    />
+                    First time are you attending Art of Story telling Event By Harh Shah?
                   </label>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    {[1,2,3,4,5].map(n => (
-                      <button
-                        key={n}
-                        onClick={() => setForm(f => ({ ...f, guestCount: n }))}
-                        style={{
-                          width: '44px',
-                          height: '44px',
-                          borderRadius: '50%',
-                          border: `1px solid ${form.guestCount === n ? 'var(--color-gold)' : 'rgba(212,164,75,0.2)'}`,
-                          background: form.guestCount === n ? 'var(--color-gold)' : 'rgba(255,255,255,0.03)',
-                          color: form.guestCount === n ? '#111' : 'var(--color-text-muted)',
-                          fontFamily: 'var(--font-body)',
-                          fontSize: '15px',
-                          fontWeight: 500,
-                          cursor: 'pointer',
-                          transition: 'all 0.25s var(--ease-luxury)',
-                        }}
-                      >
-                        {n}
-                      </button>
-                    ))}
-                  </div>
                 </div>
               )}
 
