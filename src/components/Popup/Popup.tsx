@@ -307,7 +307,7 @@ export default function Popup({ onComplete }: PopupProps) {
           letterSpacing: '0.15em',
         }}>
           <span style={{ flex: 1, height: 1, background: 'rgba(212,164,75,0.15)' }} />
-          <span style={{ fontFamily: 'var(--font-body)', fontWeight: 500 }}>12 · JUN · 2026</span>
+          <span style={{ fontFamily: 'var(--font-body)', fontWeight: 500 }}>12 · AUG · 2026</span>
           <span style={{ flex: 1, height: 1, background: 'rgba(212,164,75,0.15)' }} />
         </div>
       </div>

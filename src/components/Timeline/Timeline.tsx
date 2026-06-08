@@ -141,7 +141,7 @@ export default function Timeline() {
             A Day of <span style={{ color: '#3A2C1E' }}>Stories & Growth</span>
           </h2>
           <p className="section-subheading" style={{ maxWidth: '600px', margin: '0 auto', color: '#4A3C2F', fontWeight: 500, fontSize: '18px' }}>
-            Every moment of 12 June 2026 is crafted to take you deeper into the art of storytelling.
+            Every moment of {EVENT.dateDisplay} is crafted to take you deeper into the art of storytelling.
           </p>
         </div>
 

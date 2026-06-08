@@ -9,9 +9,9 @@ export const EVENT = {
   fullTitle: 'The Art of Story Telling By Harsh Shah',
   tagline: 'Stories Connect. Influence. Inspire.',
 
-  // 12 June 2026, 10:00 AM IST (UTC+5:30)
-  date: new Date('2026-06-12T10:00:00+05:30'),
-  dateDisplay: '12 June 2026',
+  // 12 August 2026, 10:00 AM IST (UTC+5:30)
+  date: new Date('2026-08-12T10:00:00+05:30'),
+  dateDisplay: '12 August 2026',
   timeDisplay: '10:00 AM – 5:00 PM',
   location: 'Ahmedabad, Gujarat',
 

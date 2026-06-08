@@ -4,6 +4,7 @@ import gsap from 'gsap'
 import PetalCanvas from '../shared/PetalCanvas'
 import CountdownTimer from '../shared/CountdownTimer'
 import GuestName from '../shared/GuestName'
+import { EVENT } from '../../config/event'
 
 interface HeroProps {
   visible: boolean   // becomes true after popup closes
@@ -170,9 +171,9 @@ export default function Hero({ visible }: HeroProps) {
           boxShadow: '0 4px 32px rgba(0,0,0,0.4)',
         }}>
           {[
-            { icon: '📅', text: '12 June 2026' },
-            { icon: '🕙', text: '10:00 AM – 5:00 PM' },
-            { icon: '📍', text: 'Ahmedabad, Gujarat' },
+            { icon: '📅', text: EVENT.dateDisplay },
+            { icon: '🕙', text: EVENT.timeDisplay },
+            { icon: '📍', text: EVENT.location },
           ].map(({ icon, text }) => (
             <span key={text} style={{
               fontFamily: 'var(--font-body)',
